@@ -1,0 +1,6 @@
+1.可以使用brige pattern来处理mysql executor和audit executor之间的关系
+2.auditbuider不适合改成factory，因为factory是针对一组产品，而这里没有抽象出一组产品。
+3.audit executor使用function还是class，function有以下几个缺点：
+1）不能保留状态，比如before executor的执行结果没法使用function来保留。
+2）function不利于今后的扩展
+所以这里可以用command pattern
