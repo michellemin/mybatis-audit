@@ -7,5 +7,5 @@ import com.michelle.utils.AuditException;
  * @author michelle.min
  */
 public interface AuditCommand {
-    void execute() throws AuditException;
+    Object execute() throws AuditException;
 }

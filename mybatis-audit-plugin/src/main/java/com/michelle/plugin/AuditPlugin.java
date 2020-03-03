@@ -1,14 +1,8 @@
 package com.michelle.plugin;
 
 import com.michelle.builder.MappedStatementBuilder;
-import com.michelle.builder.ParameterBuilder;
-import com.michelle.command.AfterCommand;
-import com.michelle.command.AuditCommand;
-import com.michelle.command.BeforeInsertCommand;
-import com.michelle.command.BeforeUpdateCommand;
-import com.michelle.utils.AuditCommandType;
-import com.michelle.utils.AuditCommandThreadLocal;
-import com.michelle.utils.AuditObjectNotFoundException;
+import com.michelle.command.*;
+import com.michelle.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.*;
@@ -46,70 +40,60 @@ public class AuditPlugin implements Interceptor {
         Object parameter = invocation.getArgs()[1];
         BoundSql boundSql = mappedStatement.getBoundSql(parameter);
         Executor executor = (Executor) invocation.getTarget();
-        AuditCommand beforeCommand = createAuditCommand(mappedStatement, AuditCommandType.BEFORE);
+        MappedStatementBuilder mappedStatementBuilder = null;
+        AuditCommandFactory auditCommandFactory = null;
         try {
-            beforeCommand.execute();
-        } catch (Exception e) {
+            mappedStatementBuilder = new MappedStatementBuilder(mappedStatement, parameter);
+            auditCommandFactory = AuditCommandFactoryUtil.createAuditCommandFactory(mappedStatement.getSqlCommandType());
+        } catch (AuditObjectNotFoundException e1) {
+            log.debug("Can't find audit object", e1);
+        } catch (Exception e2) {
+            log.debug("Create AuditCommandFactory and MappedStatementBuilder error", e2);
+        }
+        boolean isAudit = mappedStatementBuilder != null && auditCommandFactory != null;
+        Object beforeResult;
+        if (isAudit) {
+            try {
+                AuditCommand beforeCommand = auditCommandFactory.createBeforeCommand(mappedStatementBuilder);
+                beforeResult = beforeCommand.execute();
+            } catch (Exception e) {
+                log.error("BeforeCommand error", e);
+            }
         }
         returnObject = invocation.proceed();
-        try {
-            executeAfterCommand(mappedStatement, parameter);
-        } catch (Exception e) {
-
+        if (isAudit) {
+            try {
+                AuditCommand afterCommand = auditCommandFactory.createAfterCommand(mappedStatementBuilder);
+                if (AuditCommandThreadLocal.get() != null) {
+                    AuditCommandThreadLocal.add(afterCommand);
+                } else {
+                    afterCommand.execute();
+                }
+            } catch (Exception e) {
+                log.error("AfterCommand error", e);
+            }
         }
 
         return returnObject;
     }
 
-    private void executeAfterCommand(MappedStatement mappedStatement, Object parameter) throws Exception {
-        //批量插入参数默认为list，从list中获取插入操作返回id
+    private Object getAfterParameter(Object returnObject, Object beforeResult, SqlCommandType sqlCommandType) {
         Object afterParameter;
-        if (SqlCommandType.INSERT.equals(mappedStatement.getSqlCommandType())) {
-            if (parameter instanceof Map) {
-                parameter = ((Map) parameter).get("list");
+        //批量插入参数默认为list，从list中获取插入操作返回id
+        if (SqlCommandType.INSERT.equals(sqlCommandType)) {
+            if (returnObject instanceof Map) {
+                returnObject = ((Map) returnObject).get("list");
             }
-            if (parameter instanceof Collection) {
-                afterParameter = new ArrayList<>((Collection<Object>) parameter);
-            } else if (parameter != null) {
-                afterParameter = Collections.singletonList(parameter);
+            if (returnObject instanceof Collection) {
+                afterParameter = new ArrayList<>((Collection<Object>) returnObject);
+            } else if (returnObject != null) {
+                afterParameter = Collections.singletonList(returnObject);
             }
-        }
-        AuditCommand afterCommand = createAuditCommand(mappedStatement, AuditCommandType.AFTER);
-        if (AuditCommandThreadLocal.get() != null) {
-            AuditCommandThreadLocal.add(afterCommand);
         } else {
-            afterCommand.execute();
+            afterParameter = beforeResult;
         }
+        return null;
     }
 
-    private AuditCommand createAuditCommand(MappedStatement mappedStatement, AuditCommandType auditCommandType) throws Exception {
-        AuditCommand auditCommand = null;
-        try {
-            switch (mappedStatement.getSqlCommandType()) {
-                case UPDATE:
-                    if (auditCommandType.equals(AuditCommandType.BEFORE)) {
-                        auditCommand = new BeforeUpdateCommand(true, true, null, MappedStatementBuilder.build(), ParameterBuilder.build());
-                    }
-
-                    if (auditCommandType.equals(AuditCommandType.AFTER)) {
-                        auditCommand = new AfterCommand(true, true, null, MappedStatementBuilder.build(), ParameterBuilder.build());
-                    }
-                    break;
-                case INSERT:
-                    if (auditCommandType.equals(AuditCommandType.BEFORE)) {
-                        auditCommand = new BeforeInsertCommand();
-                    }
-                    if (auditCommandType.equals(AuditCommandType.AFTER)) {
-                        auditCommand = new AfterCommand(true, true, null, MappedStatementBuilder.build(), ParameterBuilder.build());
-                    }
-                    break;
-                default:
-                    break;
-            }
-        } catch (AuditObjectNotFoundException e) {
-            log.debug("Not fount open auditobject object");
-        }
-        return auditCommand;
-    }
 
 }
