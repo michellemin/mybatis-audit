@@ -20,7 +20,7 @@ public class InsertSqlCommandFactory implements AuditCommandFactory {
                 true,
                 true,
                 null,
-                mappedStatementBuilder.buildSqlSource(null, AuditCommandType.AFTER).build(),
+                mappedStatementBuilder.sqlSource(null, AuditCommandType.AFTER).build(),
                 ParameterBuilder.build());
     }
 
@@ -30,7 +30,7 @@ public class InsertSqlCommandFactory implements AuditCommandFactory {
                 true,
                 true,
                 null,
-                mappedStatementBuilder.buildSqlSource(null, AuditCommandType.INSERT).build(),
+                mappedStatementBuilder.sqlSource(null, AuditCommandType.INSERT).build(),
                 ParameterBuilder.build());
     }
 }

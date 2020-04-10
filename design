@@ -4,3 +4,7 @@
 1）不能保留状态，比如before executor的执行结果没法使用function来保留。
 2）function不利于今后的扩展
 所以这里可以用command pattern
+4.项目中audit command的创建用了abstract factory，而不是factory method，因为如果factory method，在该method中if else有多层，因为我们的audit command
+有分了大类update、insert，又在这下面分了before、after。
+5.使用composite pattern来实现 batch executor，在executor中增加addchild等接口，然后增加一个batchexecutor子类，这个子类的execute实现是循环child list调用每个
+child的execute。

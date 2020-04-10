@@ -15,7 +15,7 @@ public class UpdateSqlCommandFactory implements AuditCommandFactory {
                 true,
                 true,
                 null,
-                mappedStatementBuilder.buildSqlSource(null, AuditCommandType.BEFORE).build(),
+                mappedStatementBuilder.sqlSource(null, AuditCommandType.BEFORE).build(),
                 ParameterBuilder.build());
     }
 
@@ -25,7 +25,7 @@ public class UpdateSqlCommandFactory implements AuditCommandFactory {
                 true,
                 true,
                 null,
-                mappedStatementBuilder.buildSqlSource(null, AuditCommandType.AFTER).build(),
+                mappedStatementBuilder.sqlSource(null, AuditCommandType.AFTER).build(),
                 ParameterBuilder.build());
     }
 
@@ -35,7 +35,7 @@ public class UpdateSqlCommandFactory implements AuditCommandFactory {
                 true,
                 true,
                 null,
-                mappedStatementBuilder.buildSqlSource(null, AuditCommandType.INSERT).build(),
+                mappedStatementBuilder.sqlSource(null, AuditCommandType.INSERT).build(),
                 ParameterBuilder.build());
     }
 }

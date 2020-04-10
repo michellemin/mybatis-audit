@@ -37,7 +37,7 @@ public class MappedStatementBuilder {
     }
 
 
-    public MappedStatementBuilder buildSqlSource(SqlSource sqlSource, AuditCommandType auditCommandType) {
+    public MappedStatementBuilder sqlSource(SqlSource sqlSource, AuditCommandType auditCommandType) {
         if (sqlSource != null) {
             this.sqlSource = sqlSource;
         } else {
@@ -56,7 +56,7 @@ public class MappedStatementBuilder {
         return this;
     }
 
-    public MappedStatementBuilder buildId(String id) {
+    public MappedStatementBuilder id(String id) {
         if (StringUtils.isNotBlank(id)) {
             this.id = id;
         }
