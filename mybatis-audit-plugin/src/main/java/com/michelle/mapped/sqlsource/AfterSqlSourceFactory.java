@@ -1,5 +1,6 @@
-package com.michelle.builder;
+package com.michelle.mapped.sqlsource;
 
+import com.michelle.mapped.sqlparser.SqlMeta;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class AfterSqlSourceFactory implements SqlSourceFactory{
+public class AfterSqlSourceFactory implements SqlSourceFactory {
     private SqlMeta sqlMeta;
     private MappedStatement mappedStatement;
 

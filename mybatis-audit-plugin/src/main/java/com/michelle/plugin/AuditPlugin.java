@@ -1,6 +1,6 @@
 package com.michelle.plugin;
 
-import com.michelle.builder.MappedStatementBuilder;
+import com.michelle.mapped.MappedStatementBuilder;
 import com.michelle.command.*;
 import com.michelle.command.factory.AuditCommandFactory;
 import com.michelle.utils.*;
@@ -45,7 +45,7 @@ public class AuditPlugin implements Interceptor {
         AuditCommandFactory auditCommandFactory = null;
         try {
             mappedStatementBuilder = new MappedStatementBuilder(mappedStatement, parameter);
-            auditCommandFactory = AuditCommandFactoryUtil.createAuditCommandFactory(mappedStatement.getSqlCommandType());
+            auditCommandFactory = AuditCommandFactory.instance(mappedStatement.getSqlCommandType());
         } catch (AuditObjectNotFoundException e1) {
             log.debug("Can't find audit object", e1);
         } catch (Exception e2) {
@@ -80,7 +80,6 @@ public class AuditPlugin implements Interceptor {
 
     private Object getAfterParameter(Object returnObject, Object beforeResult, SqlCommandType sqlCommandType) {
         Object afterParameter;
-        //批量插入参数默认为list，从list中获取插入操作返回id
         if (SqlCommandType.INSERT.equals(sqlCommandType)) {
             if (returnObject instanceof Map) {
                 returnObject = ((Map) returnObject).get("list");

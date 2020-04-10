@@ -1,4 +1,4 @@
-package com.michelle.builder;
+package com.michelle.mapped.sqlsource;
 
 import org.apache.ibatis.mapping.SqlSource;
 

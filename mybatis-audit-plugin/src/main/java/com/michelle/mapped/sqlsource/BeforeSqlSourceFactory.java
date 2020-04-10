@@ -1,5 +1,6 @@
-package com.michelle.builder;
+package com.michelle.mapped.sqlsource;
 
+import com.michelle.mapped.sqlparser.SqlMeta;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.builder.StaticSqlSource;
@@ -9,7 +10,6 @@ import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.scripting.xmltags.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 

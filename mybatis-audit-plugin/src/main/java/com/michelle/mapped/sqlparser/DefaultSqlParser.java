@@ -1,4 +1,4 @@
-package com.michelle.builder;
+package com.michelle.mapped.sqlparser;
 
 import com.michelle.utils.AuditRuntimeException;
 import com.michelle.utils.ReflectionUtil;

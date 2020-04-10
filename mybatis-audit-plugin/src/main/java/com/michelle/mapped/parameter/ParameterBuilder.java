@@ -1,4 +1,4 @@
-package com.michelle.builder;
+package com.michelle.mapped.parameter;
 
 public class ParameterBuilder {
     public static Object build() {

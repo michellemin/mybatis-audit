@@ -1,4 +1,4 @@
-package com.michelle.builder;
+package com.michelle.mapped.sqlsource;
 
 
 /**
@@ -17,5 +17,4 @@ public class SqlSourceBuilder {
         return this;
     }
 
-    ;
 }

@@ -1,8 +1,8 @@
 package com.michelle.command.factory;
 
 
-import com.michelle.builder.MappedStatementBuilder;
-import com.michelle.builder.ParameterBuilder;
+import com.michelle.mapped.MappedStatementBuilder;
+import com.michelle.mapped.parameter.ParameterBuilder;
 import com.michelle.command.AfterCommand;
 import com.michelle.command.AuditCommand;
 import com.michelle.command.InsertCommand;
@@ -17,7 +17,7 @@ public class UpdateSqlCommandFactory implements AuditCommandFactory {
     private UpdateSqlCommandFactory() {
     }
 
-    public static UpdateSqlCommandFactory createSingleton() {
+    static UpdateSqlCommandFactory createSingleton() {
         if (singleton == null) {
             singleton = new UpdateSqlCommandFactory();
         }

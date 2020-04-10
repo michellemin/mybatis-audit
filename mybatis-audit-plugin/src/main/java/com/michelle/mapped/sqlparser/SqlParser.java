@@ -1,4 +1,4 @@
-package com.michelle.builder;
+package com.michelle.mapped.sqlparser;
 
 import org.apache.ibatis.mapping.MappedStatement;
 
