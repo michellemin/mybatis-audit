@@ -1,7 +1,8 @@
-package com.michelle.command;
+package com.michelle.command.factory;
 
 
 import com.michelle.builder.MappedStatementBuilder;
+import com.michelle.command.AuditCommand;
 
 /**
  * @author michelle.min

@@ -1,9 +1,9 @@
 package com.michelle.utils;
 
 
-import com.michelle.command.AuditCommandFactory;
-import com.michelle.command.InsertSqlCommandFactory;
-import com.michelle.command.UpdateSqlCommandFactory;
+import com.michelle.command.factory.AuditCommandFactory;
+import com.michelle.command.factory.InsertSqlCommandFactory;
+import com.michelle.command.factory.UpdateSqlCommandFactory;
 import org.apache.ibatis.mapping.SqlCommandType;
 
 /**
@@ -19,10 +19,10 @@ public class AuditCommandFactoryUtil {
         if (sqlCommandType != null) {
             switch (sqlCommandType) {
                 case INSERT:
-                    auditCommandFactory = new InsertSqlCommandFactory();
+                    auditCommandFactory = InsertSqlCommandFactory.createSingleton();
                     break;
                 case UPDATE:
-                    auditCommandFactory = new UpdateSqlCommandFactory();
+                    auditCommandFactory = UpdateSqlCommandFactory.createSingleton();
                     break;
                 default:
 

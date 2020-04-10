@@ -26,4 +26,5 @@ public abstract class AbstractAuditCommand implements AuditCommand {
 
     @Override
     public abstract Object execute() throws AuditException;
+
 }
